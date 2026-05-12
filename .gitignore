@@ -1,0 +1,29 @@
+# Environment
+.env
+*.env
+
+# LinkedIn token (contains credentials)
+data/linkedin_token.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# Database (keep structure, not data)
+data/jobs.db
+
+# Logs
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db

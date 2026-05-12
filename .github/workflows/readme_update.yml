@@ -1,0 +1,34 @@
+name: Update GitHub README
+
+on:
+  schedule:
+    - cron: '0 22 * * 0'  # Every Sunday at 22:00 UTC
+  push:
+    branches: [main]       # Also update when you push new code
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write      # Needed to push README changes
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Update profile README
+        env:
+          GITHUB_TOKEN:    ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USERNAME: ${{ secrets.GITHUB_USERNAME }}
+          GEMINI_API_KEY:  ${{ secrets.GEMINI_API_KEY }}
+        run: python main.py readme

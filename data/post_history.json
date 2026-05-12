@@ -1,0 +1,30 @@
+[
+  {
+    "text": "Most RAG systems fail because they retrieve irrelevant chunks when users ask follow-up questions without context.\n\nThis week I built a conversational RAG pipeline that maintains dialogue history to improve retrieval accuracy. The core problem: when someone asks \"What about side effects?\" after discussing a medication, traditional RAG systems don't know what \"it\" refers to.\n\nMy approach combines the current query with previous conversation turns before embedding lookup. I used LangChain for orchestration, built custom prompt templates that inject relevant chat history, and implemented semantic chunking for medical documents instead of fixed-size splitting.\n\nThe concrete result: 73% improvement in retrieval relevance for follow-up questions when tested on medical Q&A scenarios. More importantly, the system now understands context like humans do in conversation.\n\nKey learning: Context isn't just nice-to-have in conversational AI—it's essential for production systems. Users don't repeat themselves, so your retrieval shouldn't ignore what they just said.\n\nCurrently pursuing my M.Sc. at TU Dresden and seeking Werkstudent opportunities in Germany to apply these skills in real-world AI projects.\n\n#RAG #MachineLearning #LLMAgents #Werkstudent",
+    "topic": "project",
+    "tone": "professional",
+    "context": "Built a RAG pipeline this week",
+    "generated_at": "2026-05-12T22:53:10.067817",
+    "word_count": 173,
+    "posted": false
+  },
+  {
+    "text": "Attention mechanisms don't actually \"pay attention\" the way humans do — they're just weighted averages with fancy math.\n\nThis hit me hard while diving deep into transformer architectures this week. We use this biological metaphor of \"attention\" but what's really happening is matrix multiplication that assigns importance scores to different parts of the input. The model isn't consciously focusing like we do when reading; it's computing similarity between query and key vectors, then using those scores to weight the values.\n\nThe counterintuitive part? This mechanical process often works better than human-like sequential attention. While we read left-to-right and struggle with long-range dependencies, transformers can instantly connect any two tokens regardless of distance. In my ECG heart block detection work, I found similar patterns — the \"dumb\" mathematical operations often capture subtle relationships that escape human pattern recognition.\n\nThis realization changed how I approach AI system design. Instead of trying to mimic human cognition, I now focus on what mathematical operations excel at: finding patterns in high-dimensional spaces that our brains simply can't process.\n\nCurrently seeking Werkstudent/AI intern roles in Germany to apply these insights in production systems.\n\n#MachineLearning #AI #DeepLearning #Werkstudent",
+    "topic": "learning",
+    "tone": "professional",
+    "context": "Learned how attention mechanisms work this week",
+    "generated_at": "2026-05-12T23:08:40.114841",
+    "word_count": 191,
+    "posted": false
+  },
+  {
+    "text": "Building automated pipelines for personal brand management can significantly reduce the time spent on content creation and curation. This week, I developed the Personal Brand Automation pipeline, which utilizes natural language processing and computer vision techniques to generate high-quality content. The approach involves using PyTorch and LangChain to analyze and generate text, while LangGraph and RAG pipelines handle knowledge graph updates and question answering. By integrating these components, the pipeline can automatically create and curate content for social media platforms, blogs, and other online channels. One notable result from this project is the ability to generate consistent and engaging content, with a 30% reduction in time spent on content creation. This pipeline has the potential to benefit individuals and businesses looking to maintain a strong online presence, and I'm looking to apply this technology in real-world applications. omlanhasan@gmail.com for more information #MachineLearning #AI #LLMAgents #MedicalAI",
+    "topic": "project",
+    "tone": "professional",
+    "context": "Built the Personal Brand Automation pipeline this week",
+    "draft_path": "drafts\\2026-05-12_project.md",
+    "generated_at": "2026-05-12T23:39:28.478032",
+    "word_count": 145,
+    "posted": false
+  }
+]
