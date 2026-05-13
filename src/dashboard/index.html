@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Career OS — Omlan Hasan</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f1a;--bg2:#141726;--bg3:#1c1f33;--bg4:#242840;
+  --border:#252840;--border2:#2e3355;
+  --text:#e4e7f5;--muted:#6b7099;--hint:#4a5080;
+  --accent:#7c6fff;--accent2:#00d4aa;--accent3:#ff6b8a;
+  --warn:#f59e0b;--danger:#ef4444;--success:#10b981;--info:#3b82f6;
+  --font:'Inter',system-ui,sans-serif;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
+
+/* ── sidebar ── */
+.sidebar{width:230px;background:var(--bg2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
+.logo{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
+.logo-title{font-size:14px;font-weight:700;color:var(--accent);letter-spacing:.02em}
+.logo-sub{font-size:11px;color:var(--muted);margin-top:2px}
+nav{flex:1;overflow-y:auto;padding:8px 0}
+.nav-section{font-size:10px;font-weight:600;color:var(--hint);text-transform:uppercase;
+  letter-spacing:.1em;padding:14px 18px 5px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;cursor:pointer;
+  font-size:13px;color:var(--muted);border-left:2px solid transparent;transition:all .15s;user-select:none}
+.nav-item:hover{color:var(--text);background:rgba(124,111,255,.06)}
+.nav-item.active{color:var(--accent);border-left-color:var(--accent);background:rgba(124,111,255,.1);font-weight:500}
+.nav-icon{font-size:15px;width:18px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;
+  padding:1px 6px;border-radius:10px;font-weight:600}
+.sidebar-foot{padding:14px 18px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)}
+.foot-dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:6px;vertical-align:middle}
+
+/* ── main ── */
+.main{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.topbar{height:52px;border-bottom:1px solid var(--border);display:flex;align-items:center;
+  padding:0 28px;gap:12px;flex-shrink:0}
+.page-heading{font-size:15px;font-weight:600;flex:1}
+.page-sub{font-size:12px;color:var(--muted)}
+.content{flex:1;overflow-y:auto;padding:24px 28px}
+.page{display:none}.page.active{display:block}
+
+/* ── cards ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:16px}
+.card-sm{padding:14px 18px}
+.card-title{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.07em;margin-bottom:14px}
+.card-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+
+/* ── metrics ── */
+.metrics{display:grid;gap:12px;margin-bottom:18px}
+.metrics-4{grid-template-columns:repeat(4,1fr)}
+.metrics-3{grid-template-columns:repeat(3,1fr)}
+.metrics-2{grid-template-columns:repeat(2,1fr)}
+.metric{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px 18px}
+.metric-val{font-size:26px;font-weight:700}
+.metric-lab{font-size:11px;color:var(--muted);margin-top:3px}
+.metric-accent{color:var(--accent)}
+.metric-green{color:var(--success)}
+.metric-warn{color:var(--warn)}
+
+/* ── forms ── */
+label{display:block;font-size:11px;font-weight:500;color:var(--muted);margin-bottom:5px;margin-top:12px}
+label:first-child{margin-top:0}
+input,select,textarea{width:100%;padding:8px 11px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-size:13px;font-family:var(--font);outline:none;transition:border .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+textarea{resize:vertical}
+select option{background:var(--bg3)}
+
+/* ── buttons ── */
+.btn{padding:8px 16px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;
+  border:none;transition:all .15s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{opacity:.85}
+.btn-success{background:var(--success);color:#fff}.btn-success:hover{opacity:.85}
+.btn-danger2{background:rgba(239,68,68,.15);color:var(--danger);border:1px solid rgba(239,68,68,.3)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--text);border-color:var(--border2)}
+.btn-info{background:rgba(59,130,246,.15);color:var(--info);border:1px solid rgba(59,130,246,.3)}
+.btn-sm{padding:5px 11px;font-size:11px}
+.btn-xs{padding:3px 8px;font-size:11px}
+.btn-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;align-items:center}
+
+/* ── pills/badges ── */
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:2px 9px;border-radius:20px;font-weight:500}
+.pill-ok{background:rgba(16,185,129,.15);color:var(--success)}
+.pill-warn{background:rgba(245,158,11,.15);color:var(--warn)}
+.pill-err{background:rgba(239,68,68,.15);color:var(--danger)}
+.pill-info{background:rgba(59,130,246,.15);color:var(--info)}
+.tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:10px;margin:2px 2px 0 0;font-weight:500}
+.tag-blue{background:rgba(124,111,255,.2);color:#a89cff}
+.tag-green{background:rgba(16,185,129,.2);color:var(--success)}
+.tag-amber{background:rgba(245,158,11,.2);color:var(--warn)}
+.tag-red{background:rgba(239,68,68,.2);color:var(--danger)}
+
+/* ── grid layouts ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.split{display:grid;grid-template-columns:1fr 380px;gap:16px;align-items:start}
+.split-lg{display:grid;grid-template-columns:1fr 320px;gap:16px;align-items:start}
+
+/* ── table ── */
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:9px 12px;font-size:10px;font-weight:600;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)}
+td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.stage-badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600}
+.st-Applied{background:rgba(124,111,255,.2);color:#a89cff}
+.st-Phone{background:rgba(245,158,11,.2);color:var(--warn)}
+.st-Interview{background:rgba(0,212,170,.2);color:var(--accent2)}
+.st-Offer{background:rgba(16,185,129,.2);color:var(--success)}
+.st-Rejected{background:rgba(239,68,68,.2);color:var(--danger)}
+
+/* ── job card (hunt radar) ── */
+.job-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+  padding:16px;margin-bottom:10px;transition:border .15s}
+.job-card:hover{border-color:var(--border2)}
+.job-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px}
+.job-title-text{font-size:13px;font-weight:600}
+.job-company{font-size:12px;color:var(--muted);margin-top:2px}
+.match-ring{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;flex-shrink:0;border:2px solid}
+.match-strong{color:var(--success);border-color:var(--success)}
+.match-good{color:var(--accent2);border-color:var(--accent2)}
+.match-stretch{color:var(--warn);border-color:var(--warn)}
+.match-skip{color:var(--danger);border-color:var(--danger)}
+.match-unknown{color:var(--muted);border-color:var(--muted)}
+.gap-item{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--bg4);
+  border-radius:6px;margin-bottom:5px;font-size:12px}
+.gap-icon{font-size:14px}
+
+/* ── skill bars ── */
+.skill-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.skill-name{font-size:12px;min-width:150px;color:var(--text)}
+.skill-track{flex:1;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.skill-fill{height:100%;border-radius:3px;background:var(--accent);transition:width .6s}
+.skill-label{font-size:11px;color:var(--muted);min-width:55px;text-align:right}
+
+/* ── interview ── */
+.q-box{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:14px}
+.q-text{font-size:14px;font-weight:500;margin-bottom:12px;line-height:1.5}
+.score-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.score-card{background:var(--bg4);border-radius:8px;padding:12px;text-align:center}
+.score-num{font-size:22px;font-weight:700;color:var(--accent)}
+.score-lbl{font-size:10px;color:var(--muted);margin-top:3px}
+
+/* ── week planner ── */
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:10px 0}
+.week-cell{height:30px;border-radius:6px;background:var(--bg3);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);cursor:pointer}
+.week-cell.done{background:rgba(16,185,129,.2);color:var(--success);border-color:rgba(16,185,129,.4)}
+.week-cell.todo{background:rgba(124,111,255,.15);color:var(--accent);border-color:rgba(124,111,255,.3)}
+
+/* ── paper card ── */
+.paper-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px}
+.paper-title{font-size:13px;font-weight:500;margin-bottom:5px}
+.paper-summary{font-size:12px;color:var(--muted);line-height:1.6}
+.paper-meta{margin-top:8px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.rel-score{background:rgba(0,212,170,.15);color:var(--accent2);font-size:10px;
+  padding:1px 7px;border-radius:4px;font-weight:600}
+
+/* ── plan timeline ── */
+.week-block{border-left:2px solid var(--accent);padding-left:16px;margin-bottom:18px}
+.week-block-title{font-size:13px;font-weight:600;margin-bottom:4px}
+.week-block-goal{font-size:12px;color:var(--muted);margin-bottom:8px}
+.task-row{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
+.task-row:last-child{border:none}
+.task-hours{background:var(--bg4);padding:1px 7px;border-radius:4px;font-size:10px;color:var(--accent);flex-shrink:0}
+
+/* ── content area ── */
+.draft-ta{width:100%;background:var(--bg3);border:1px solid var(--accent);border-radius:10px;
+  padding:14px;font-size:13px;line-height:1.7;color:var(--text);min-height:180px;
+  resize:vertical;font-family:var(--font);outline:none}
+.wc{font-size:11px;color:var(--muted);text-align:right;margin-top:4px}
+.chatgpt-tip{background:rgba(124,111,255,.08);border:1px solid rgba(124,111,255,.2);
+  border-radius:8px;padding:10px 14px;font-size:12px;color:#a89cff;margin-top:10px;line-height:1.6}
+
+/* ── project cards ── */
+.proj-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;cursor:pointer;transition:all .15s}
+.proj-card:hover{border-color:var(--accent);background:rgba(124,111,255,.05)}
+.proj-icon{font-size:20px;margin-bottom:6px}
+.proj-title{font-size:13px;font-weight:600;margin-bottom:3px}
+.proj-sub{font-size:11px;color:var(--muted);line-height:1.4}
+
+/* ── english practice ── */
+.practice-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:10px}
+.day-badge{background:rgba(124,111,255,.2);color:var(--accent);font-size:11px;font-weight:700;
+  padding:3px 10px;border-radius:6px;display:inline-block;margin-bottom:8px}
+
+/* ── spinner / states ── */
+.spin{animation:spin .8s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading{color:var(--muted);font-size:13px;padding:20px;text-align:center}
+.empty{color:var(--muted);font-size:13px;text-align:center;padding:28px;line-height:1.7}
+
+/* ── toast ── */
+#toast{position:fixed;bottom:22px;right:22px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:10px;padding:11px 18px;font-size:13px;transform:translateY(70px);opacity:0;
+  transition:all .25s;z-index:999;max-width:320px}
+#toast.show{transform:translateY(0);opacity:1}
+
+/* ── progress bar ── */
+.prog-wrap{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;margin:4px 0}
+.prog-fill{height:100%;border-radius:3px;background:var(--accent);transition:width .5s}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-title">⚡ Career OS</div>
+    <div class="logo-sub">Omlan Hasan · TU Dresden</div>
+  </div>
+  <nav>
+    <div class="nav-section">Overview</div>
+    <div class="nav-item active" onclick="go('home',this)">
+      <span class="nav-icon">🏠</span> Dashboard
+    </div>
+    <div class="nav-section">Find &amp; Apply</div>
+    <div class="nav-item" onclick="go('hunt',this)">
+      <span class="nav-icon">🔍</span> Job hunt radar
+    </div>
+    <div class="nav-item" onclick="go('tracker',this)">
+      <span class="nav-icon">📋</span> Application tracker
+    </div>
+    <div class="nav-item" onclick="go('docs',this)">
+      <span class="nav-icon">📄</span> CV &amp; cover letter
+    </div>
+    <div class="nav-section">Prepare &amp; Win</div>
+    <div class="nav-item" onclick="go('interview',this)">
+      <span class="nav-icon">🎤</span> Interview coach
+    </div>
+    <div class="nav-item" onclick="go('english',this)">
+      <span class="nav-icon">💬</span> English practice
+    </div>
+    <div class="nav-section">Build &amp; Brand</div>
+    <div class="nav-item" onclick="go('projects',this)">
+      <span class="nav-icon">🛠</span> Project pipeline
+    </div>
+    <div class="nav-item" onclick="go('content',this)">
+      <span class="nav-icon">✍️</span> Content &amp; brand
+    </div>
+    <div class="nav-item" onclick="go('learning',this)">
+      <span class="nav-icon">🧠</span> Learning radar
+    </div>
+  </nav>
+  <div class="sidebar-foot" id="foot">
+    <span class="foot-dot" style="background:var(--muted)"></span>Checking...
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+<div class="topbar">
+  <div class="page-heading" id="topbar-title">Dashboard</div>
+  <div class="page-sub" id="topbar-sub"></div>
+</div>
+<div class="content">
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="metrics metrics-4" id="home-metrics">
+    <div class="metric"><div class="metric-val metric-accent" id="hm-jobs">—</div><div class="metric-lab">Applications tracked</div></div>
+    <div class="metric"><div class="metric-val metric-green" id="hm-active">—</div><div class="metric-lab">Active pipeline</div></div>
+    <div class="metric"><div class="metric-val metric-accent" id="hm-drafts">—</div><div class="metric-lab">Post drafts ready</div></div>
+    <div class="metric"><div class="metric-val metric-green" id="hm-published">—</div><div class="metric-lab">Posts published</div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">System status</div>
+      <div id="home-status"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Option B workflow this week</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg3);border-radius:8px;font-size:12px">
+          <span style="font-size:18px">🤖</span>
+          <div><strong>1. Auto-draft</strong><br><span style="color:var(--muted)">Groq generates from your context</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg3);border-radius:8px;font-size:12px">
+          <span style="font-size:18px">💬</span>
+          <div><strong>2. You refine in ChatGPT Go</strong><br><span style="color:var(--muted)">Edit here or in browser</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg3);border-radius:8px;font-size:12px">
+          <span style="font-size:18px">🚀</span>
+          <div><strong>3. One-click publish</strong><br><span style="color:var(--muted)">Posts to LinkedIn automatically</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Quick actions</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="go('hunt',document.querySelectorAll('.nav-item')[1])">🔍 Search jobs now</button>
+      <button class="btn btn-ghost" onclick="go('content',document.querySelectorAll('.nav-item')[7])">✍️ Generate post draft</button>
+      <button class="btn btn-ghost" onclick="go('interview',document.querySelectorAll('.nav-item')[4])">🎤 Mock interview</button>
+      <button class="btn btn-ghost" onclick="go('learning',document.querySelectorAll('.nav-item')[8])">🧠 Find papers</button>
+    </div>
+  </div>
+</div>
+
+<!-- JOB HUNT RADAR -->
+<div class="page" id="page-hunt">
+  <div class="grid2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-title">Search settings</div>
+      <label>Job sources</label>
+      <select id="hunt-sources">
+        <option value="arbeitnow,remoteok">Germany + Global Remote</option>
+        <option value="arbeitnow">Germany only (Werkstudent)</option>
+        <option value="remoteok">Global Remote only</option>
+        <option value="arbeitnow,arbeitnow_remote,remoteok,wwr">All sources</option>
+      </select>
+      <label>Results per source</label>
+      <select id="hunt-limit"><option>5</option><option selected>8</option><option>12</option></select>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="searchJobs(false)" id="hunt-btn">🔍 Search jobs</button>
+        <button class="btn btn-ghost btn-sm" onclick="searchJobs(true)">↺ Refresh</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">How it works</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.8">
+        <div>🔍 Searches Arbeitnow (Germany Werkstudent) + RemoteOK (global)</div>
+        <div style="margin-top:6px">🧠 Gemini extracts required skills + keywords from each posting</div>
+        <div style="margin-top:6px">📊 Groq scores your match % + identifies gaps</div>
+        <div style="margin-top:6px">🗺 Generates a project plan to close each gap</div>
+        <div style="margin-top:6px">➕ Add any job to your tracker with one click</div>
+      </div>
+    </div>
+  </div>
+  <div id="hunt-results"><div class="empty">Run a search above to find jobs</div></div>
+</div>
+
+<!-- TRACKER -->
+<div class="page" id="page-tracker">
+  <div class="metrics metrics-4" style="margin-bottom:16px">
+    <div class="metric"><div class="metric-val" id="tm-total">—</div><div class="metric-lab">Total applied</div></div>
+    <div class="metric"><div class="metric-val metric-green" id="tm-active">—</div><div class="metric-lab">Active pipeline</div></div>
+    <div class="metric"><div class="metric-val metric-accent" id="tm-rate">—</div><div class="metric-lab">Response rate</div></div>
+    <div class="metric"><div class="metric-val metric-green" id="tm-offers">—</div><div class="metric-lab">Offers</div></div>
+  </div>
+  <div class="card">
+    <div class="card-row">
+      <div class="card-title" style="margin:0">All applications</div>
+      <button class="btn btn-primary btn-sm" onclick="toggleAddJob()">+ Add manual</button>
+    </div>
+    <div id="add-job-form" style="display:none;background:var(--bg3);border-radius:8px;padding:14px;margin-bottom:14px">
+      <div class="grid2">
+        <div>
+          <label>Job title</label><input id="j-title" placeholder="ML Werkstudent">
+          <label>Company</label><input id="j-company" placeholder="Bosch Dresden">
+        </div>
+        <div>
+          <label>Location</label><input id="j-loc" placeholder="Dresden, Germany">
+          <label>Source</label>
+          <select id="j-src"><option>LinkedIn</option><option>StepStone</option><option>Wellfound</option>
+            <option>ai-jobs.net</option><option>Cold email</option><option>TU Dresden portal</option></select>
+        </div>
+      </div>
+      <label>Job URL</label><input id="j-url" placeholder="https://...">
+      <div class="btn-row">
+        <button class="btn btn-success btn-sm" onclick="addJobManual()">Save</button>
+        <button class="btn btn-ghost btn-sm" onclick="toggleAddJob()">Cancel</button>
+      </div>
+    </div>
+    <table><thead><tr>
+      <th>Role</th><th>Company</th><th>Source</th><th>Stage</th><th>Match</th><th>Applied</th><th>Actions</th>
+    </tr></thead><tbody id="tracker-body"></tbody></table>
+  </div>
+</div>
+
+<!-- CV & COVER LETTER -->
+<div class="page" id="page-docs">
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Generate tailored documents</div>
+      <label>Select a job from your tracker</label>
+      <select id="cv-job-sel" onchange="loadCVJob()">
+        <option value="">— pick a job —</option>
+      </select>
+      <div id="cv-job-preview" style="display:none;margin-top:12px;padding:10px;background:var(--bg3);border-radius:8px;font-size:12px">
+        <div id="cv-job-info"></div>
+        <div id="cv-gap-info" style="margin-top:8px;color:var(--muted)"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="generateCV()">⚡ Tailor CV + cover letter</button>
+      </div>
+      <div class="chatgpt-tip" style="margin-top:12px">
+        💬 <strong>Manual use:</strong> Open <code>prompts/cv_tailor.md</code> or <code>prompts/cover_letter.md</code> in ChatGPT Go and fill the job details manually for any posting not in your tracker.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">CV checklist</div>
+      <div id="cv-checklist">
+        <label class="skill-row" style="cursor:pointer"><input type="checkbox" style="width:auto;margin-right:6px"> One page — every line earns its place</label>
+        <label class="skill-row" style="cursor:pointer"><input type="checkbox" style="width:auto;margin-right:6px"> Every bullet starts with action verb + metric</label>
+        <label class="skill-row" style="cursor:pointer"><input type="checkbox" style="width:auto;margin-right:6px"> Keywords from job posting appear naturally</label>
+        <label class="skill-row" style="cursor:pointer"><input type="checkbox" style="width:auto;margin-right:6px"> GitHub link with pinned repos present</label>
+        <label class="skill-row" style="cursor:pointer"><input type="checkbox" style="width:auto;margin-right:6px"> Publication listed with conference + year</label>
+        <label class="skill-row" style="cursor:pointer"><input type="checkbox" style="width:auto;margin-right:6px"> ATS-safe: no tables, standard fonts, plain PDF</label>
+        <label class="skill-row" style="cursor:pointer"><input type="checkbox" style="width:auto;margin-right:6px"> Tailored version saved per application</label>
+      </div>
+    </div>
+  </div>
+  <div id="cv-result" style="display:none">
+    <div class="card">
+      <div class="card-row"><div class="card-title" style="margin:0">Tailored cover letter</div><button class="btn btn-ghost btn-sm" onclick="copyEl('cv-cover')">📋 Copy</button></div>
+      <div id="cv-cover" style="background:var(--bg3);border-radius:8px;padding:16px;font-size:13px;line-height:1.7;white-space:pre-wrap;color:var(--text)"></div>
+    </div>
+    <div class="card">
+      <div class="card-row"><div class="card-title" style="margin:0">ATS score &amp; keywords</div></div>
+      <div id="cv-ats"></div>
+    </div>
+  </div>
+</div>
+
+<!-- INTERVIEW COACH -->
+<div class="page" id="page-interview">
+  <div class="split">
+    <div>
+      <div class="card">
+        <div class="card-title">Generate question</div>
+        <label>Question type</label>
+        <select id="q-type">
+          <option value="technical_llm">Technical — LLMs &amp; RAG</option>
+          <option value="technical_ml">Technical — ML fundamentals</option>
+          <option value="behavioural">Behavioural (STAR method)</option>
+          <option value="system_design">System design</option>
+        </select>
+        <label>Interviewer context</label>
+        <select id="q-company">
+          <option value="german_engineering">German engineering (Bosch/Siemens)</option>
+          <option value="ai_startup">AI startup</option>
+          <option value="research_institute">Research institute (Fraunhofer/DFKI)</option>
+        </select>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="getQuestion()">🎤 Get question</button>
+        </div>
+      </div>
+      <div class="q-box" id="q-box" style="display:none">
+        <div class="q-text" id="q-text"></div>
+        <div id="q-covers" style="font-size:11px;color:var(--muted);margin-bottom:12px"></div>
+        <label>Your answer</label>
+        <textarea id="q-answer" rows="5" placeholder="Speak your answer — aim for 90–120 seconds worth of content..."></textarea>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="evalAnswer()">📊 Evaluate my answer</button>
+          <button class="btn btn-ghost btn-sm" onclick="copyEl('q-text')">📋 Copy question</button>
+        </div>
+      </div>
+      <div id="eval-result" style="display:none">
+        <div class="card">
+          <div class="card-title">Feedback</div>
+          <div class="score-grid" id="score-grid"></div>
+          <div style="margin-top:12px">
+            <div style="font-size:12px;font-weight:600;margin-bottom:4px;color:var(--success)">✓ Strongest part</div>
+            <div id="eval-strong" style="font-size:12px;color:var(--muted)"></div>
+          </div>
+          <div style="margin-top:10px">
+            <div style="font-size:12px;font-weight:600;margin-bottom:4px;color:var(--warn)">⚠ Biggest gap</div>
+            <div id="eval-gap" style="font-size:12px;color:var(--muted)"></div>
+          </div>
+          <div style="margin-top:10px">
+            <div style="font-size:12px;font-weight:600;margin-bottom:4px">💡 Ideal answer</div>
+            <div id="eval-ideal" style="font-size:12px;color:var(--muted);line-height:1.7;background:var(--bg3);padding:12px;border-radius:8px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card card-sm">
+        <div class="card-title">Topics to drill</div>
+        <div style="font-size:12px;line-height:1.9;color:var(--muted)">
+          <div>🔴 "Explain RAG vs fine-tuning"</div>
+          <div>🔴 "How does attention work?"</div>
+          <div>🟡 "Describe backpropagation"</div>
+          <div>🟡 "Precision vs recall — when?"</div>
+          <div>🟢 "Tell me about your paper"</div>
+          <div>🟢 "Project you're most proud of"</div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+            <strong style="color:var(--text)">STAR template</strong><br>
+            <span>Situation → Task → Action → Result</span><br>
+            <span>Target: 90–120 seconds per answer</span>
+          </div>
+        </div>
+      </div>
+      <div class="card card-sm">
+        <div class="card-title">Key phrases</div>
+        <div style="font-size:11px;line-height:1.9;color:var(--muted)">
+          <strong style="color:var(--text)">Buying time:</strong><br>
+          "That's a great question — let me think through it."<br><br>
+          <strong style="color:var(--text)">Showing process:</strong><br>
+          "My first instinct is X, but the trade-off is..."<br><br>
+          <strong style="color:var(--text)">Recovering:</strong><br>
+          "I haven't used that specific tool, but my approach would be similar to how I handled..."<br><br>
+          <strong style="color:var(--text)">Closing answer:</strong><br>
+          "Does that answer it, or would you like more depth on any part?"
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ENGLISH PRACTICE -->
+<div class="page" id="page-english">
+  <div class="grid2">
+    <div>
+      <div class="card">
+        <div class="card-title">Daily practice plan (20 min/day)</div>
+        <div class="practice-card">
+          <div class="day-badge">Monday</div>
+          <div style="font-size:13px;font-weight:500;margin-bottom:4px">Shadowing</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6">Pick a 3-min AI YouTube video. Play sentence by sentence — repeat out loud matching rhythm. Try: Andrej Karpathy, Lex Fridman, 3Blue1Brown.</div>
+        </div>
+        <div class="practice-card">
+          <div class="day-badge">Wednesday</div>
+          <div style="font-size:13px;font-weight:500;margin-bottom:4px">Explain a concept</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6">Set a 3-min timer. Explain any ML topic out loud in English to a non-expert. Record on phone — spot your filler words.</div>
+        </div>
+        <div class="practice-card">
+          <div class="day-badge">Friday</div>
+          <div style="font-size:13px;font-weight:500;margin-bottom:4px">Mock answer</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6">Pull a random interview question from the coach tab. Answer out loud with STAR structure. Time it — aim for 90–120 seconds.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-title">Presentation English</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.8">
+          <div>❌ "Today I will talk about..." → <span style="color:var(--text)">Never open this way</span></div>
+          <div style="margin-top:8px">✅ Structure: <strong style="color:var(--text)">Hook → Problem → Your approach → Results → What's next</strong></div>
+          <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+            <strong style="color:var(--text)">Monthly goal:</strong> Record one 5-min project demo video. Post as LinkedIn native video. Builds speaking confidence AND visibility simultaneously.
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Community practice</div>
+        <div style="font-size:12px;line-height:1.9;color:var(--muted)">
+          <div>💬 <strong style="color:var(--text)">Hugging Face Discord</strong> — comment on ML threads in English</div>
+          <div>💬 <strong style="color:var(--text)">LangChain Discord</strong> — ask/answer questions</div>
+          <div>💬 <strong style="color:var(--text)">r/MachineLearning</strong> — write technical comments</div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+            Writing technical comments in English daily is equivalent to spoken practice — you think in English under pressure.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<div class="page" id="page-projects">
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px">
+    <div class="proj-card" style="border-color:var(--accent)">
+      <div class="proj-icon">🤖</div>
+      <div class="proj-title">Personal Brand Automation</div>
+      <div class="proj-sub">This project. LinkedIn poster + GitHub README bot + job tracker. Skills: APIs, OAuth, LLMs, scheduling</div>
+      <div style="margin-top:8px"><span class="tag tag-green">✓ Building now</span></div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-icon">🩺</div>
+      <div class="proj-title">Medical AI demo</div>
+      <div class="proj-sub">Add Gradio/Streamlit demo to ECG paper. Makes publication interactive — huge recruiter impact.</div>
+      <div style="margin-top:8px"><span class="tag tag-blue">Next</span><span class="tag tag-amber">2 weeks</span></div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-icon">🔎</div>
+      <div class="proj-title">Research paper finder</div>
+      <div class="proj-sub">RAG pipeline over ArXiv + Semantic Scholar. Find papers matching your courses and job criteria automatically.</div>
+      <div style="margin-top:8px"><span class="tag tag-blue">Q2</span></div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-icon">📝</div>
+      <div class="proj-title">CV tailor bot</div>
+      <div class="proj-sub">Job URL in → tailored CV bullets + cover letter out. Claude API + scraping + template engine.</div>
+      <div style="margin-top:8px"><span class="tag tag-blue">Q2</span></div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-icon">🎓</div>
+      <div class="proj-title">Interview coach agent</div>
+      <div class="proj-sub">LangGraph agent that conducts mock interviews, scores answers, tracks weak areas over time.</div>
+      <div style="margin-top:8px"><span class="tag tag-blue">Q3</span></div>
+    </div>
+    <div class="proj-card">
+      <div class="proj-icon">🌐</div>
+      <div class="proj-title">Job aggregator</div>
+      <div class="proj-sub">Scrape 8+ boards, deduplicate, score match to profile, send weekly digest. This dashboard IS that.</div>
+      <div style="margin-top:8px"><span class="tag tag-green">✓ Built</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">GitHub publishing checklist — every project</div>
+    <div class="grid2">
+      <div>
+        <label style="cursor:pointer" class="skill-row"><input type="checkbox" style="width:auto;margin-right:8px"> README: problem → approach → results → how to run</label>
+        <label style="cursor:pointer" class="skill-row"><input type="checkbox" style="width:auto;margin-right:8px"> Demo GIF or screenshot at top of README</label>
+        <label style="cursor:pointer" class="skill-row"><input type="checkbox" style="width:auto;margin-right:8px"> requirements.txt or pyproject.toml present</label>
+        <label style="cursor:pointer" class="skill-row"><input type="checkbox" style="width:auto;margin-right:8px"> .env.example (never commit real keys)</label>
+      </div>
+      <div>
+        <label style="cursor:pointer" class="skill-row"><input type="checkbox" style="width:auto;margin-right:8px"> GitHub Actions: at least 1 workflow</label>
+        <label style="cursor:pointer" class="skill-row"><input type="checkbox" style="width:auto;margin-right:8px"> Tagged with release version</label>
+        <label style="cursor:pointer" class="skill-row"><input type="checkbox" style="width:auto;margin-right:8px"> LinkedIn post written announcing the project</label>
+        <label style="cursor:pointer" class="skill-row"><input type="checkbox" style="width:auto;margin-right:8px"> Repo pinned on your profile</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT & BRAND -->
+<div class="page" id="page-content">
+  <div class="split">
+    <div>
+      <div class="card">
+        <div class="card-title">Generate post draft (Groq, free)</div>
+        <label>Topic</label>
+        <select id="p-topic">
+          <option value="project">Project update — what I built</option>
+          <option value="learning">Weekly learning — something surprising</option>
+          <option value="paper">Paper insight — something I read</option>
+          <option value="seeking">Job seeking — looking for Werkstudent</option>
+          <option value="insight">AI opinion — nuanced take</option>
+          <option value="progress">Progress update</option>
+        </select>
+        <label>Tone</label>
+        <select id="p-tone">
+          <option value="professional">Professional — direct, value-first</option>
+          <option value="casual">Casual — warm, like a colleague</option>
+          <option value="technical">Technical — for ML engineers</option>
+        </select>
+        <label>What happened this week? <span style="color:var(--muted)">(be specific)</span></label>
+        <textarea id="p-context" rows="3" placeholder="e.g. Built conversational RAG with LangChain. Semantic chunking on medical docs. 40% better retrieval on follow-ups."></textarea>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="genDraft()" id="draft-btn">⚡ Generate draft</button>
+        </div>
+      </div>
+      <div id="draft-card" style="display:none">
+        <div class="card">
+          <div class="card-row">
+            <div class="card-title" style="margin:0">Draft — edit then publish</div>
+            <div id="draft-meta" style="font-size:11px;color:var(--muted)"></div>
+          </div>
+          <textarea class="draft-ta" id="draft-ta" oninput="updateWC()"></textarea>
+          <div class="wc" id="draft-wc">0 words</div>
+          <div class="chatgpt-tip">
+            💬 <strong>ChatGPT Go tip:</strong> Copy text → paste in ChatGPT Go with a refinement command from <code>prompts/linkedin_post.md</code> → paste back here → publish.
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-success" onclick="publishPost()">🚀 Publish to LinkedIn</button>
+            <button class="btn btn-ghost btn-sm" onclick="copyEl('draft-ta')">📋 Copy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card card-sm">
+        <div class="card-title">Pending drafts</div>
+        <div id="draft-list"><div class="loading">Loading...</div></div>
+      </div>
+      <div class="card card-sm">
+        <div class="card-title">Content calendar</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.9">
+          <div>📅 <strong style="color:var(--text)">Mon</strong> — project update post</div>
+          <div>📅 <strong style="color:var(--text)">Thu</strong> — AI insight / paper share</div>
+          <div>📅 <strong style="color:var(--text)">Monthly</strong> — 60-sec demo video</div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+            <strong style="color:var(--text)">Engage rule:</strong> Comment on 5 posts/week from AI/ML people. Genuine + specific = network growth.
+          </div>
+        </div>
+      </div>
+      <div class="card card-sm">
+        <div class="card-title">Prompt library</div>
+        <div id="prompt-quick-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LEARNING RADAR -->
+<div class="page" id="page-learning">
+  <div class="split">
+    <div>
+      <div class="card">
+        <div class="card-title">Find papers for my gaps</div>
+        <label>Skill gaps to find papers for</label>
+        <input id="learn-gaps" placeholder="e.g. LoRA, MLOps, fine-tuning, deployment">
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="findPapers()">📡 Find papers</button>
+          <button class="btn btn-ghost btn-sm" onclick="loadReadingList()">📚 My reading list</button>
+        </div>
+      </div>
+      <div id="papers-results"></div>
+
+      <div class="card" style="margin-top:4px">
+        <div class="card-title">Generate learning plan</div>
+        <label>Select a job to plan for</label>
+        <select id="plan-job-sel">
+          <option value="">— pick a job with gap analysis —</option>
+        </select>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="genPlan()">🗺 Generate 4-week plan</button>
+        </div>
+      </div>
+      <div id="plan-result"></div>
+    </div>
+    <div>
+      <div class="card card-sm">
+        <div class="card-title">Learning principle</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.7;background:var(--bg3);padding:12px;border-radius:8px;margin-bottom:12px">
+          Don't take a course to learn a skill. <strong style="color:var(--text)">Build a project that requires the skill.</strong> The course is the reference — the project is the education.
+        </div>
+        <div class="card-title" style="margin-top:12px">Skills to develop</div>
+        <div id="skill-bars">
+          <div class="skill-row"><span class="skill-name">LLM internals</span><div class="skill-track"><div class="skill-fill" style="width:60%"></div></div><span class="skill-label">In progress</span></div>
+          <div class="skill-row"><span class="skill-name">LangGraph agents</span><div class="skill-track"><div class="skill-fill" style="width:82%"></div></div><span class="skill-label">Build project</span></div>
+          <div class="skill-row"><span class="skill-name">MLOps / deploy</span><div class="skill-track"><div class="skill-fill" style="width:38%"></div></div><span class="skill-label">Next focus</span></div>
+          <div class="skill-row"><span class="skill-name">LoRA fine-tuning</span><div class="skill-track"><div class="skill-fill" style="width:32%"></div></div><span class="skill-label">Build next</span></div>
+          <div class="skill-row"><span class="skill-name">Vector databases</span><div class="skill-track"><div class="skill-fill" style="width:68%"></div></div><span class="skill-label">Solid</span></div>
+          <div class="skill-row"><span class="skill-name">Docker + CI/CD</span><div class="skill-track"><div class="skill-fill" style="width:72%"></div></div><span class="skill-label">Good</span></div>
+        </div>
+      </div>
+      <div class="card card-sm">
+        <div class="card-title">Discovery sources</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.9">
+          <div>📰 <a href="https://paperswithcode.com" target="_blank" style="color:var(--accent)">Papers With Code</a> — SOTA with code</div>
+          <div>🤗 <a href="https://huggingface.co/papers" target="_blank" style="color:var(--accent)">HF Daily Papers</a></div>
+          <div>📬 <a href="https://newsletter.sebastianraschka.com" target="_blank" style="color:var(--accent)">Sebastian Raschka</a> — weekly</div>
+          <div>📬 <a href="https://www.deeplearning.ai/the-batch/" target="_blank" style="color:var(--accent)">The Batch</a> — deeplearning.ai</div>
+          <div style="margin-top:8px">🔬 <strong style="color:var(--text)">NotebookLM</strong> — upload a paper PDF for deep Q&amp;A reading</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /main -->
+<div id="toast"></div>
+
+<script>
+// ── state ─────────────────────────────────────────────────────────────────────
+let currentJobs = [];
+let huntResults = [];
+
+// ── nav ───────────────────────────────────────────────────────────────────────
+const PAGE_META = {
+  home:      ["Dashboard", "All systems overview"],
+  hunt:      ["Job hunt radar", "Search real jobs · analyse criteria · close gaps"],
+  tracker:   ["Application tracker", "From radar to offer"],
+  docs:      ["CV & cover letter", "Tailored per application, every time"],
+  interview: ["Interview coach", "Mock interviews with AI feedback"],
+  english:   ["English practice", "Speaking confidence for interviews"],
+  projects:  ["Project pipeline", "What to build and when"],
+  content:   ["Content & brand", "Draft → refine in ChatGPT Go → publish"],
+  learning:  ["Learning radar", "Papers, plans, and skill gaps"],
+};
+
+function go(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+  const [title, sub] = PAGE_META[id] || [id, ""];
+  document.getElementById('topbar-title').textContent = title;
+  document.getElementById('topbar-sub').textContent   = sub;
+  if (id === 'home')     loadHome();
+  if (id === 'tracker')  loadTracker();
+  if (id === 'docs')     loadCVJobSel();
+  if (id === 'content')  { loadDraftList(); loadPromptQuick(); }
+  if (id === 'learning') loadPlanJobSel();
+}
+
+// ── toast ─────────────────────────────────────────────────────────────────────
+function toast(msg, ok=true) {
+  const t = document.getElementById('toast');
+  t.textContent = (ok ? '✓  ' : '✕  ') + msg;
+  t.style.borderColor = ok ? 'var(--success)' : 'var(--danger)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function spin(btn, label='') { btn.disabled=true; btn.dataset.orig=btn.innerHTML; btn.innerHTML=`<span class="spin">⟳</span> ${label||'Loading...'}`; }
+function unspin(btn) { btn.disabled=false; btn.innerHTML=btn.dataset.orig; }
+
+// ── helpers ───────────────────────────────────────────────────────────────────
+async function api(url, opts={}) {
+  const r = await fetch(url, opts);
+  if (!r.ok) { const e = await r.json().catch(()=>({detail:'Error'})); throw new Error(e.detail||r.statusText); }
+  return r.json();
+}
+
+function copyEl(id) {
+  const el = document.getElementById(id);
+  const text = el.value !== undefined ? el.value : el.textContent;
+  navigator.clipboard.writeText(text).then(() => toast('Copied!'));
+}
+
+// ── HOME ──────────────────────────────────────────────────────────────────────
+async function loadHome() {
+  const s = await api('/api/status').catch(() => null);
+  if (!s) return;
+  document.getElementById('hm-jobs').textContent      = s.jobs_total;
+  document.getElementById('hm-active').textContent    = s.jobs_active;
+  document.getElementById('hm-drafts').textContent    = s.drafts;
+  document.getElementById('hm-published').textContent = s.published;
+
+  const env = s.env || {};
+  document.getElementById('home-status').innerHTML = [
+    ['Groq API (posts, CV, interview)', env.groq],
+    ['Gemini API (papers, README)',     env.gemini],
+    ['GitHub token',                    env.github],
+    ['LinkedIn OAuth',                  env.linkedin],
+  ].map(([label, ok]) => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;
+                background:var(--bg3);border-radius:7px;margin-bottom:6px;font-size:12px">
+      <span>${label}</span>
+      <span class="pill ${ok?'pill-ok':'pill-warn'}">${ok?'✓ Ready':'⚠ Set up'}</span>
+    </div>`).join('');
+
+  const allOk = env.groq && env.gemini;
+  document.getElementById('foot').innerHTML =
+    `<span class="foot-dot" style="background:${allOk?'var(--success)':'var(--warn)'}"></span>` +
+    (allOk ? 'All systems ready' : 'Some API keys missing');
+}
+
+// ── JOB HUNT ─────────────────────────────────────────────────────────────────
+async function searchJobs(refresh=false) {
+  const btn = document.getElementById('hunt-btn');
+  spin(btn, 'Searching...');
+  const sources = document.getElementById('hunt-sources').value;
+  const limit   = document.getElementById('hunt-limit').value;
+  const container = document.getElementById('hunt-results');
+  container.innerHTML = '<div class="loading"><span class="spin">⟳</span> Fetching jobs from multiple sources...</div>';
+  try {
+    const r = await api(`/api/hunt/search?sources=${sources}&limit=${limit}&refresh=${refresh}`);
+    huntResults = r.jobs || [];
+    renderHuntResults(huntResults);
+    toast(`Found ${huntResults.length} jobs${r.from_cache ? ' (cached)' : ''}`);
+  } catch(e) { toast(e.message, false); container.innerHTML = `<div class="empty">${e.message}</div>`; }
+  unspin(btn);
+}
+
+function renderHuntResults(jobs) {
+  const container = document.getElementById('hunt-results');
+  if (!jobs.length) { container.innerHTML = '<div class="empty">No jobs found — try different sources or keywords.</div>'; return; }
+  container.innerHTML = jobs.map((j,i) => {
+    const gap  = j.gap_analysis || {};
+    const crit = j.criteria || {};
+    const verdict = gap.verdict || 'unknown';
+    const matchCls = {strong:'match-strong', good:'match-good', stretch:'match-stretch', skip:'match-skip'}[verdict] || 'match-unknown';
+    const matchPct = gap.match_score ?? '?';
+    const tags = (j.tags || []).slice(0,5).map(t => `<span class="tag tag-blue">${t}</span>`).join('');
+    const skills_have    = (gap.skills_have    || []).slice(0,4).map(s => `<span class="tag tag-green">✓ ${s}</span>`).join('');
+    const skills_missing = (gap.skills_missing || []).slice(0,4).map(s => `<span class="tag tag-red">✗ ${s}</span>`).join('');
+
+    return `<div class="job-card">
+      <div class="job-card-head">
+        <div style="flex:1">
+          <div class="job-title-text">${j.title}</div>
+          <div class="job-company">${j.company} · ${j.location} · <span style="color:var(--muted)">${j.source_name||''}</span></div>
+          ${tags ? `<div style="margin-top:6px">${tags}</div>` : ''}
+        </div>
+        <div class="match-ring ${matchCls}">${matchPct}%</div>
+      </div>
+
+      ${crit.summary ? `<div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.6">${crit.summary}</div>` : ''}
+
+      ${skills_have || skills_missing ? `
+        <div style="margin-bottom:10px">
+          ${skills_have}<br style="margin:4px 0">${skills_missing}
+        </div>` : ''}
+
+      ${gap.cover_letter_angle ? `
+        <div style="font-size:11px;color:var(--accent2);margin-bottom:10px">
+          💡 Angle: ${gap.cover_letter_angle}
+        </div>` : ''}
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" onclick="addFoundJob(${i})">+ Add to tracker</button>
+        ${j.url ? `<a href="${j.url}" target="_blank" class="btn btn-ghost btn-sm">↗ View posting</a>` : ''}
+        ${!gap.verdict ? `<button class="btn btn-info btn-sm" onclick="analyseFoundJob(${i})">🧠 Analyse</button>` : ''}
+      </div>
+
+      ${gap.gap_projects && gap.gap_projects.length ? `
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border)">
+          <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:6px">GAP PROJECTS TO BUILD</div>
+          ${gap.gap_projects.slice(0,3).map(p => `
+            <div class="gap-item">
+              <span class="gap-icon">🛠</span>
+              <div style="flex:1">
+                <strong>${p.gap}</strong> — ${p.project}
+              </div>
+              <span class="tag tag-amber">${p.time_weeks}w</span>
+            </div>`).join('')}
+        </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+async function analyseFoundJob(i) {
+  // First add to tracker, then analyse
+  const job = huntResults[i];
+  try {
+    const added = await api('/api/hunt/add-found', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(job)
+    });
+    toast('Added to tracker — analysing...');
+    const result = await api('/api/hunt/analyse', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({job_id: added.id})
+    });
+    huntResults[i].criteria     = result.criteria;
+    huntResults[i].gap_analysis = result.gap_analysis;
+    renderHuntResults(huntResults);
+    toast('Analysis complete!');
+  } catch(e) { toast(e.message, false); }
+}
+
+async function addFoundJob(i) {
+  const job = huntResults[i];
+  try {
+    await api('/api/hunt/add-found', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(job)
+    });
+    toast(`${job.title} at ${job.company} added to tracker`);
+  } catch(e) { toast(e.message, false); }
+}
+
+// ── TRACKER ───────────────────────────────────────────────────────────────────
+async function loadTracker() {
+  const [jobs, stats] = await Promise.all([api('/api/jobs'), api('/api/jobs/stats')]).catch(()=>[[], {}]);
+  currentJobs = Array.isArray(jobs) ? jobs : [];
+
+  const s = stats || {};
+  document.getElementById('tm-total').textContent  = s.total  || 0;
+  document.getElementById('tm-active').textContent = s.active || 0;
+  document.getElementById('tm-rate').textContent   = s.total ? s.response_rate + '%' : '—';
+  document.getElementById('tm-offers').textContent = s.offers || 0;
+
+  const tbody = document.getElementById('tracker-body');
+  if (!currentJobs.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--muted)">
+      No applications yet — use Job Hunt Radar to find and add jobs.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = currentJobs.map(j => {
+    const stKey = j.stage.replace(' ','');
+    const gap   = j.gap || {};
+    const matchBadge = gap.match_score != null
+      ? `<span class="pill ${gap.match_score>=70?'pill-ok':gap.match_score>=40?'pill-warn':'pill-err'}">${gap.match_score}%</span>`
+      : '<span style="color:var(--muted);font-size:11px">—</span>';
+    const stageOpts = ['Applied','Phone screen','Interview','Offer','Rejected','Withdrawn']
+      .map(s => `<option ${s===j.stage?'selected':''}>${s}</option>`).join('');
+    return `<tr>
+      <td><div style="font-weight:500;font-size:12px">${j.job_title}</div>
+        ${j.job_url?`<a href="${j.job_url}" target="_blank" style="font-size:10px;color:var(--accent)">↗ link</a>`:''}</td>
+      <td style="font-size:12px">${j.company}<div style="font-size:10px;color:var(--muted)">${j.location||''}</div></td>
+      <td style="font-size:11px;color:var(--muted)">${j.source||'—'}</td>
+      <td>
+        <select style="font-size:11px;padding:2px 6px;background:var(--bg3);border:1px solid var(--border);
+          border-radius:6px;color:var(--text)" onchange="updateStage(${j.id},this.value)">
+          ${stageOpts}</select></td>
+      <td>${matchBadge}</td>
+      <td style="font-size:11px;color:var(--muted)">${j.applied_date||'—'}</td>
+      <td><button class="btn btn-danger2 btn-xs" onclick="delJob(${j.id})">✕</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function toggleAddJob() {
+  const f = document.getElementById('add-job-form');
+  f.style.display = f.style.display==='none' ? 'block' : 'none';
+}
+
+async function addJobManual() {
+  const body = { job_title: document.getElementById('j-title').value, company: document.getElementById('j-company').value,
+    location: document.getElementById('j-loc').value, source: document.getElementById('j-src').value,
+    job_url: document.getElementById('j-url').value };
+  if (!body.job_title || !body.company) { toast('Title and company required', false); return; }
+  await api('/api/jobs', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  toggleAddJob(); loadTracker(); toast('Added');
+}
+
+async function updateStage(id, stage) {
+  await api(`/api/jobs/${id}`, {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({stage})});
+  loadTracker();
+}
+
+async function delJob(id) {
+  if (!confirm('Remove this application?')) return;
+  await api(`/api/jobs/${id}`, {method:'DELETE'});
+  loadTracker(); toast('Removed');
+}
+
+// ── CV & DOCS ─────────────────────────────────────────────────────────────────
+async function loadCVJobSel() {
+  const jobs = await api('/api/jobs').catch(()=>[]);
+  const sel  = document.getElementById('cv-job-sel');
+  sel.innerHTML = '<option value="">— pick a job —</option>' +
+    jobs.filter(j=>j.criteria).map(j=>`<option value="${j.id}">${j.job_title} @ ${j.company}</option>`).join('') +
+    (jobs.filter(j=>!j.criteria).length ? `<optgroup label="— analyse first (Job Hunt Radar) —">` +
+      jobs.filter(j=>!j.criteria).map(j=>`<option value="${j.id}" disabled>${j.job_title} @ ${j.company}</option>`).join('') + '</optgroup>' : '');
+}
+
+function loadCVJob() {
+  const id  = document.getElementById('cv-job-sel').value;
+  const job = currentJobs.find(j=>j.id==id);
+  if (!job) { document.getElementById('cv-job-preview').style.display='none'; return; }
+  document.getElementById('cv-job-preview').style.display='block';
+  document.getElementById('cv-job-info').innerHTML =
+    `<strong>${job.job_title}</strong> at ${job.company} · ${job.location||''}`;
+  const gap = job.gap||{};
+  document.getElementById('cv-gap-info').innerHTML = gap.match_score != null
+    ? `Match: ${gap.match_score}% · Missing: ${(gap.skills_missing||[]).join(', ')||'none'}`
+    : 'No gap analysis yet — run Analyse in Job Hunt Radar first.';
+}
+
+async function generateCV() {
+  const id = document.getElementById('cv-job-sel').value;
+  if (!id) { toast('Pick a job first', false); return; }
+  const btn = event.target; spin(btn, 'Generating...');
+  try {
+    const r = await api('/api/cv/tailor', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({job_id:parseInt(id)})});
+    document.getElementById('cv-result').style.display='block';
+    document.getElementById('cv-cover').textContent = r.cover_letter || '';
+    document.getElementById('cv-ats').innerHTML =
+      `<div style="margin-bottom:10px">
+        <span style="font-size:20px;font-weight:700;color:var(--accent)">${r.ats_score}%</span>
+        <span style="font-size:12px;color:var(--muted);margin-left:8px">ATS keyword match</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted)">Keywords matched: ${(r.keywords_used||[]).map(k=>`<span class="tag tag-green">${k}</span>`).join('')}</div>`;
+    document.getElementById('cv-result').scrollIntoView({behavior:'smooth'});
+    toast('Cover letter generated!');
+  } catch(e) { toast(e.message, false); }
+  unspin(btn);
+}
+
+// ── INTERVIEW ─────────────────────────────────────────────────────────────────
+let currentQ = null;
+async function getQuestion() {
+  const btn = event.target; spin(btn, 'Getting question...');
+  try {
+    const r = await api('/api/interview/question', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({q_type: document.getElementById('q-type').value,
+                            company_type: document.getElementById('q-company').value})
+    });
+    currentQ = r;
+    document.getElementById('q-box').style.display='block';
+    document.getElementById('q-text').textContent = r.question || '';
+    document.getElementById('q-covers').innerHTML = r.what_strong_answer_covers
+      ? 'Strong answer covers: ' + r.what_strong_answer_covers.map(p=>`<span class="tag tag-blue">${p}</span>`).join(' ')
+      : '';
+    document.getElementById('q-answer').value='';
+    document.getElementById('eval-result').style.display='none';
+    document.getElementById('q-box').scrollIntoView({behavior:'smooth'});
+  } catch(e) { toast(e.message, false); }
+  unspin(btn);
+}
+
+async function evalAnswer() {
+  const answer = document.getElementById('q-answer').value.trim();
+  if (!answer) { toast('Write your answer first', false); return; }
+  const btn = event.target; spin(btn, 'Evaluating...');
+  try {
+    const r = await api('/api/interview/evaluate', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({question: currentQ?.question||'', answer, q_type: document.getElementById('q-type').value})
+    });
+    document.getElementById('eval-result').style.display='block';
+    document.getElementById('score-grid').innerHTML = [
+      ['Technical', r.technical_accuracy?.score, r.technical_accuracy?.comment],
+      ['Clarity',   r.clarity?.score,   r.clarity?.comment],
+      ['Structure', r.structure?.score,  r.structure?.comment],
+    ].map(([label, score, comment]) => `
+      <div class="score-card">
+        <div class="score-num">${score||'?'}/10</div>
+        <div class="score-lbl">${label}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">${comment||''}</div>
+      </div>`).join('');
+    document.getElementById('eval-strong').textContent = r.strongest_part  || '';
+    document.getElementById('eval-gap').textContent    = r.biggest_gap     || '';
+    document.getElementById('eval-ideal').textContent  = r.ideal_answer    || '';
+    document.getElementById('eval-result').scrollIntoView({behavior:'smooth'});
+  } catch(e) { toast(e.message, false); }
+  unspin(btn);
+}
+
+// ── CONTENT ───────────────────────────────────────────────────────────────────
+async function genDraft() {
+  const btn = document.getElementById('draft-btn'); spin(btn, 'Generating...');
+  try {
+    const r = await api('/api/draft', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({topic: document.getElementById('p-topic').value,
+                            tone:  document.getElementById('p-tone').value,
+                            context: document.getElementById('p-context').value})
+    });
+    document.getElementById('draft-card').style.display='block';
+    document.getElementById('draft-ta').value  = r.text || '';
+    document.getElementById('draft-meta').textContent = `${r.topic} / ${r.tone} · ${r.word_count} words`;
+    updateWC();
+    loadDraftList();
+    document.getElementById('draft-card').scrollIntoView({behavior:'smooth'});
+    toast('Draft generated!');
+  } catch(e) { toast(e.message, false); }
+  unspin(btn);
+}
+
+function updateWC() {
+  const text = document.getElementById('draft-ta').value;
+  const wc   = text.trim().split(/\s+/).filter(Boolean).length;
+  const el   = document.getElementById('draft-wc');
+  el.textContent  = `${wc} words`;
+  el.style.color  = wc<140||wc>230 ? 'var(--warn)' : 'var(--muted)';
+}
+
+async function publishPost() {
+  const text = document.getElementById('draft-ta').value.trim();
+  if (!text) { toast('No text to publish', false); return; }
+  if (!confirm('Post this to LinkedIn?')) return;
+  try {
+    const r = await api('/api/publish', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});
+    toast('Posted! ' + (r.url||''));
+    loadHome();
+  } catch(e) { toast(e.message||'Check LinkedIn OAuth setup', false); }
+}
+
+async function loadDraftList() {
+  const list = document.getElementById('draft-list');
+  const drafts = await api('/api/drafts').catch(()=>[]);
+  if (!drafts.length) { list.innerHTML='<div style="color:var(--muted);font-size:12px">No drafts yet.</div>'; return; }
+  list.innerHTML = drafts.map(d => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;
+                border-bottom:1px solid var(--border);font-size:12px">
+      <div>
+        <div style="font-weight:500">${d.filename}</div>
+        <div style="color:var(--muted);font-size:11px">${d.words} words</div>
+      </div>
+      <button class="btn btn-ghost btn-xs" onclick="openDraft(${JSON.stringify(d).replace(/'/g,'')})">Open</button>
+    </div>`).join('');
+}
+
+function openDraft(d) {
+  document.getElementById('draft-card').style.display='block';
+  document.getElementById('draft-ta').value=d.text;
+  document.getElementById('draft-meta').textContent=`${d.filename} · ${d.words} words`;
+  updateWC();
+  document.getElementById('draft-card').scrollIntoView({behavior:'smooth'});
+}
+
+async function loadPromptQuick() {
+  const prompts = await api('/api/prompts').catch(()=>[]);
+  document.getElementById('prompt-quick-list').innerHTML = prompts.map(p => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;
+                border-bottom:1px solid var(--border);font-size:12px">
+      <span style="color:var(--muted)">${p.title}</span>
+      <button class="btn btn-ghost btn-xs" onclick="copyPrompt('${p.filename}')">📋 Copy</button>
+    </div>`).join('');
+}
+
+async function copyPrompt(filename) {
+  const r = await api(`/api/prompts/${filename}`).catch(()=>null);
+  if (r) { await navigator.clipboard.writeText(r.content); toast('Prompt copied — paste into ChatGPT Go'); }
+}
+
+// ── LEARNING ─────────────────────────────────────────────────────────────────
+async function findPapers() {
+  const gaps = document.getElementById('learn-gaps').value;
+  const btn  = event.target; spin(btn, 'Searching ArXiv...');
+  const container = document.getElementById('papers-results');
+  container.innerHTML='<div class="loading"><span class="spin">⟳</span> Fetching papers via Gemini...</div>';
+  try {
+    const papers = await api(`/api/learning/papers?gaps=${encodeURIComponent(gaps)}`);
+    container.innerHTML = papers.map(p => `
+      <div class="paper-card">
+        <div class="paper-title">${p.title}</div>
+        <div class="paper-summary">${p.summary||p.abstract?.slice(0,200)||''}</div>
+        <div class="paper-meta">
+          <span class="rel-score">★ ${p.relevance}</span>
+          ${p.url?`<a href="${p.url}" target="_blank" style="color:var(--accent);font-size:11px">Read →</a>`:''}
+          <button class="btn btn-ghost btn-xs" onclick="navigator.clipboard.writeText('${(p.summary||'').replace(/'/g,"\\'")}');toast('Summary copied')">Copy summary</button>
+        </div>
+      </div>`).join('');
+    toast(`${papers.length} papers found`);
+  } catch(e) { toast(e.message, false); container.innerHTML=''; }
+  unspin(btn);
+}
+
+async function loadReadingList() {
+  const list = await api('/api/learning/reading-list').catch(()=>[]);
+  const container = document.getElementById('papers-results');
+  if (!list.length) { container.innerHTML='<div class="empty">Reading list is empty. Find papers above.</div>'; return; }
+  container.innerHTML = `<div class="card"><div class="card-title">My reading list (${list.length})</div>` +
+    list.map((p,i) => `
+      <div style="padding:10px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start">
+        <input type="checkbox" ${p.read?'checked':''} onchange="markRead(${i})" style="width:auto;margin-top:3px">
+        <div>
+          <div style="font-size:12px;font-weight:500;${p.read?'text-decoration:line-through;color:var(--muted)':''}">${p.title}</div>
+          <div style="font-size:11px;color:var(--muted)">${p.summary?.slice(0,120)||''}${p.tag?` · <span class="tag tag-blue">${p.tag}</span>`:''}</div>
+        </div>
+      </div>`).join('') + '</div>';
+}
+
+async function markRead(i) {
+  await api(`/api/learning/reading-list`).catch(()=>null); // just reload
+  toast('Marked as read');
+}
+
+async function loadPlanJobSel() {
+  const jobs = await api('/api/jobs').catch(()=>[]);
+  const sel  = document.getElementById('plan-job-sel');
+  const withGap = jobs.filter(j=>j.gap);
+  sel.innerHTML = '<option value="">— pick a job with gap analysis —</option>' +
+    withGap.map(j=>`<option value="${j.id}">${j.job_title} @ ${j.company}</option>`).join('');
+}
+
+async function genPlan() {
+  const id = document.getElementById('plan-job-sel').value;
+  if (!id) { toast('Pick a job with gap analysis first', false); return; }
+  const btn = event.target; spin(btn, 'Generating 4-week plan...');
+  const container = document.getElementById('plan-result');
+  container.innerHTML='<div class="loading"><span class="spin">⟳</span> Building your personalised learning sprint...</div>';
+  try {
+    const plan = await api('/api/learning/plan', {
+      method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({job_id:parseInt(id)})
+    });
+    if (plan.message) { container.innerHTML=`<div class="card"><div style="color:var(--success)">${plan.message}</div></div>`; unspin(btn); return; }
+    const weeks = plan.weeks || [];
+    container.innerHTML = `<div class="card">
+      <div class="card-title">${plan.total_weeks||4}-week sprint · ${plan.weekly_hours||10} hrs/week</div>
+      ${weeks.map(w => `
+        <div class="week-block">
+          <div class="week-block-title">Week ${w.week}: ${w.focus||''}</div>
+          <div class="week-block-goal">${w.goal||''}</div>
+          ${(w.tasks||[]).map(t=>`
+            <div class="task-row">
+              <span class="task-hours">${t.hours}h</span>
+              <div style="flex:1">
+                <strong>${t.task}</strong>
+                ${t.resource?`<div style="font-size:11px;color:var(--muted)">${t.resource}</div>`:''}
+              </div>
+              ${t.output?`<span class="tag tag-green" style="flex-shrink:0">${t.output}</span>`:''}
+            </div>`).join('')}
+          ${w.project_milestone?`<div style="margin-top:6px;font-size:11px;color:var(--accent)">🏁 Milestone: ${w.project_milestone}</div>`:''}
+        </div>`).join('')}
+      ${plan.capstone_project?`
+        <div style="background:rgba(124,111,255,.1);border:1px solid rgba(124,111,255,.25);border-radius:10px;padding:14px;margin-top:4px">
+          <div style="font-size:12px;font-weight:700;color:var(--accent);margin-bottom:6px">🏆 Capstone project</div>
+          <div style="font-size:13px;font-weight:600">${plan.capstone_project.name||''}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">${plan.capstone_project.description||''}</div>
+          ${plan.capstone_project.github_readme_pitch?`<div style="font-size:11px;color:var(--accent2);margin-top:6px">README pitch: "${plan.capstone_project.github_readme_pitch}"</div>`:''}
+        </div>`:''}
+    </div>`;
+    toast('Plan generated!');
+  } catch(e) { toast(e.message, false); container.innerHTML=''; }
+  unspin(btn);
+}
+
+// ── init ──────────────────────────────────────────────────────────────────────
+loadHome();
+loadDraftList();
+</script>
+</body>
+</html>

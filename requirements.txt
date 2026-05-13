@@ -1,23 +1,23 @@
-# Core — free model APIs
-groq>=0.9.0               # Llama 3.3 70B — post generation, cover letters (FREE)
-google-genai>=0.8.0       # Gemini 2.0 Flash — papers, README (FREE)
+# Free model APIs (zero cost)
+groq>=0.9.0               # Llama 3.3 70B — posts, CV, interview coach
+google-genai>=0.8.0       # Gemini 2.0 Flash — papers, README, classification
 python-dotenv>=1.0.0
 httpx>=0.27.0
 requests>=2.31.0
 
-# LinkedIn OAuth
-flask>=3.0.0              # Local OAuth callback server
-
-# Job tracker API
+# Web dashboard
 fastapi>=0.111.0
 uvicorn>=0.29.0
 sqlalchemy>=2.0.0
 
+# LinkedIn OAuth
+flask>=3.0.0
+
 # Content pipeline
-feedparser>=6.0.0         # RSS reader for ArXiv / HuggingFace
+feedparser>=6.0.0         # RSS — ArXiv, HuggingFace, etc.
 schedule>=1.2.0
-rich>=13.0.0              # Beautiful CLI output
-typer>=0.12.0             # CLI framework
+rich>=13.0.0
+typer>=0.12.0
 
 # GitHub
 PyGithub>=2.3.0

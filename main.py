@@ -270,6 +270,33 @@ def weekly(
 # AUTH-LINKEDIN — One-time OAuth setup
 # ──────────────────────────────────────────────────────────
 
+@app.command()
+def dashboard(
+    port: int = typer.Option(8000, "--port", "-p", help="Port to run on"),
+):
+    """Start the web dashboard — control everything from your browser."""
+    import webbrowser, threading, time
+    url = f"http://localhost:{port}"
+    console.print(Panel(
+        f"Dashboard starting at [bold cyan]{url}[/]\n\n"
+        "Sections:\n"
+        "  🏠 Dashboard  — status + metrics\n"
+        "  ✍️  Generate   — draft + edit + publish\n"
+        "  📄 Papers     — AI paper digest\n"
+        "  💼 Job tracker — full CRUD\n"
+        "  📋 Prompts    — copy any prompt\n\n"
+        "Press [bold]Ctrl+C[/] to stop.",
+        title="[bold]Personal Brand Automation — Web Dashboard[/]",
+        border_style="cyan",
+    ))
+    def open_browser():
+        time.sleep(1.2)
+        webbrowser.open(url)
+    threading.Thread(target=open_browser, daemon=True).start()
+    from src.dashboard.app import start
+    start(port=port)
+
+
 @app.command(name="auth-linkedin")
 def auth_linkedin():
     """One-time LinkedIn OAuth 2.0 setup (opens browser)."""
