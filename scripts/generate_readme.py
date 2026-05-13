@@ -1,4 +1,79 @@
-# Career OS — Personal Brand Automation
+"""
+scripts/generate_readme.py
+--------------------------
+Auto-generates README.md from actual project state.
+Runs on every git push via GitHub Actions.
+Also callable locally: python scripts/generate_readme.py
+
+What it reads:
+  - src/ module count and names
+  - requirements.txt for dependency list
+  - .github/workflows/ for CI/CD jobs
+  - prompts/ for prompt library
+  - Current date (injected as "last updated")
+"""
+
+import os
+import sys
+from pathlib import Path
+from datetime import datetime, timezone
+
+ROOT = Path(__file__).parent.parent
+
+def count_modules() -> dict:
+    src = ROOT / "src"
+    modules = {}
+    for d in sorted(src.iterdir()):
+        if d.is_dir() and not d.name.startswith("_"):
+            py_files = list(d.glob("*.py"))
+            py_files = [f for f in py_files if not f.name.startswith("_")]
+            if py_files:
+                modules[d.name] = [f.stem for f in py_files]
+    return modules
+
+def count_workflows() -> list:
+    wf_dir = ROOT / ".github" / "workflows"
+    if not wf_dir.exists():
+        return []
+    workflows = []
+    for f in sorted(wf_dir.glob("*.yml")):
+        content = f.read_text()
+        # Extract schedule cron if present
+        schedule = ""
+        for line in content.splitlines():
+            if "cron:" in line:
+                schedule = line.strip().replace("- cron:", "").strip().strip("'")
+                break
+        workflows.append({"name": f.stem.replace("_", " ").title(), "file": f.name, "schedule": schedule})
+    return workflows
+
+def count_prompts() -> list:
+    prompts_dir = ROOT / "prompts"
+    if not prompts_dir.exists():
+        return []
+    return [f.stem.replace("_", " ").title() for f in sorted(prompts_dir.glob("*.md")) if f.name != "README.md"]
+
+def get_python_deps() -> list:
+    req = ROOT / "requirements.txt"
+    if not req.exists():
+        return []
+    deps = []
+    for line in req.read_text().splitlines():
+        line = line.strip()
+        if line and not line.startswith("#"):
+            pkg = line.split(">=")[0].split("==")[0].split("[")[0].strip()
+            deps.append(pkg)
+    return deps
+
+def generate() -> str:
+    modules   = count_modules()
+    workflows = count_workflows()
+    prompts   = count_prompts()
+    deps      = get_python_deps()
+    updated   = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    total_py  = sum(len(v) for v in modules.values())
+
+    readme = f"""# Career OS — Personal Brand Automation
 
 > AI-powered career pipeline built by **Omlan Hasan** (M.Sc. AI/ML, TU Dresden).
 > Searches real jobs, analyses skill gaps, generates tailored CVs and cover letters,
@@ -13,14 +88,14 @@
 [![PWA](https://img.shields.io/badge/PWA-installable-5A0FC8?style=flat)](https://web.dev/pwa)
 [![Auto README](https://img.shields.io/badge/README-auto--generated-brightgreen?style=flat)](scripts/generate_readme.py)
 
-> **Last updated:** 2026-05-13 01:04 UTC · **Python files:** 12 across 10 modules
+> **Last updated:** {updated} · **Python files:** {total_py} across {len(modules)} modules
 
 ---
 
 ## What this is
 
 A full career automation system — not a job board wrapper. It actively:
-- Searches 4 job sources and scores your match % against each posting
+- Searches {len([s for s in ['Arbeitnow Germany', 'RemoteOK', 'We Work Remotely', 'Jobicy']])} job sources and scores your match % against each posting
 - Teaches you a concept first, then drills you with tailored interview questions
 - Generates tailored CV + cover letter per application and saves them automatically
 - Posts to LinkedIn on a weekly schedule via GitHub Actions
@@ -35,22 +110,13 @@ all in one repo that actually does something useful.
 ## Architecture
 
 ```
-personal-brand-automation/
+{ROOT.name}/
 ├── src/
-│   ├── content/  # rss_reader, generator
-│   ├── cv/  # tailor
-│   ├── dashboard/  # app
-│   ├── github/  # readme_updater
-│   ├── interview/  # coach
-│   ├── jobs/  # scraper
-│   ├── learning/  # radar
-│   ├── linkedin/  # poster, oauth
-│   ├── models/  # router
-│   ├── tracker/  # api
+{chr(10).join(f"│   ├── {name}/{'  ' if len(name) < 10 else ' '}# {', '.join(files)}" for name, files in modules.items())}
 ├── scripts/
 │   └── generate_readme.py  # This file — auto-generates README on push
-├── prompts/                 # Prompt library: Cover Letter, Cv Tailor, Interview Coach, Linkedin Post, Paper Summary
-├── .github/workflows/       # 4 automated workflows
+├── prompts/                 # Prompt library: {', '.join(prompts)}
+├── .github/workflows/       # {len(workflows)} automated workflows
 ├── data/                    # SQLite DB, CV outputs, job cache, interview progress
 └── main.py                  # CLI entrypoint
 ```
@@ -115,7 +181,7 @@ railway up
 git clone https://github.com/OmlanHasan007/personal-brand-automation
 cd personal-brand-automation
 python -m venv venv
-venv\Scripts\activate      # Windows
+venv\\Scripts\\activate      # Windows
 pip install -r requirements.txt
 cp .env.example .env         # Add your free API keys
 python main.py status        # Check everything
@@ -145,10 +211,7 @@ python main.py status                 # Check all keys
 
 ## GitHub Actions
 
-| `auto_readme.yml` | Auto Readme | on push / manual |
-| `paper_digest.yml` | Paper Digest | 0 8 * * 5'   # Every Friday at 08:00 UTC |
-| `readme_update.yml` | Readme Update | 0 22 * * 0'  # Every Sunday at 22:00 UTC |
-| `weekly_post.yml` | Weekly Post | 0 7 * * 1'   # Every Monday at 07:00 UTC (09:00 Dresden time) |
+{chr(10).join(f"| `{w['file']}` | {w['name']} | {w['schedule'] or 'on push / manual'} |" for w in workflows)}
 
 All workflows run on GitHub's free tier. Set secrets in repo Settings → Secrets → Actions.
 
@@ -156,7 +219,7 @@ All workflows run on GitHub's free tier. Set secrets in repo Settings → Secret
 
 ## Dependencies
 
-`groq`, `google-genai`, `python-dotenv`, `httpx`, `requests`, `fastapi`, `uvicorn`, `sqlalchemy`, `aiofiles`, `flask`, `feedparser`, `schedule`, `rich`, `typer`, `PyGithub`, `pydantic`, `python-dateutil`
+{', '.join(f'`{d}`' for d in deps)}
 
 ---
 
@@ -166,7 +229,7 @@ Every AI task has a dedicated prompt file in `prompts/`. Each works two ways:
 - **Automatic** — called by the pipeline via API
 - **Manual** — paste into ChatGPT Go for human refinement
 
-Files: `cover_letter.md`, `cv_tailor.md`, `interview_coach.md`, `linkedin_post.md`, `paper_summary.md`
+Files: {', '.join(f'`{p.lower().replace(" ","_")}.md`' for p in prompts)}
 
 ---
 
@@ -180,10 +243,10 @@ Files: `cover_letter.md`, `cv_tailor.md`, `interview_coach.md`, `linkedin_post.m
 | **Web scraping** | Arbeitnow API, RemoteOK JSON, RSS feeds (feedparser) |
 | **PWA** | Service worker, Web App Manifest, install prompt, offline cache |
 | **Database** | SQLite — job tracker, CV history, interview progress |
-| **CI/CD** | 4 GitHub Actions with scheduled triggers |
+| **CI/CD** | {len(workflows)} GitHub Actions with scheduled triggers |
 | **Mobile** | Responsive CSS, bottom nav, safe-area support, Android install |
 | **Prompt engineering** | Structured JSON extraction, multi-task routing, teach-first pedagogy |
-| **Architecture** | 10 independent `src/` modules, clean separation of concerns |
+| **Architecture** | {len(modules)} independent `src/` modules, clean separation of concerns |
 
 ---
 
@@ -201,3 +264,13 @@ Files: `cover_letter.md`, `cv_tailor.md`, `interview_coach.md`, `linkedin_post.m
 ---
 
 *This README is auto-generated by [`scripts/generate_readme.py`](scripts/generate_readme.py) on every push.*
+"""
+    return readme
+
+
+if __name__ == "__main__":
+    output = generate()
+    readme_path = ROOT / "README.md"
+    readme_path.write_text(output, encoding="utf-8")
+    print(f"README.md written ({len(output)} chars, {output.count(chr(10))} lines)")
+    print(f"Last updated: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}")

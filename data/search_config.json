@@ -1,0 +1,60 @@
+{
+  "job_titles": [
+    "Werkstudent Machine Learning",
+    "Werkstudent Artificial Intelligence",
+    "Working Student AI",
+    "AI Engineer Intern",
+    "NLP Engineer",
+    "Computer Vision Intern"
+  ],
+  "keywords": [
+    "machine learning",
+    "deep learning",
+    "llm",
+    "nlp",
+    "computer vision",
+    "pytorch",
+    "langchain",
+    "python ai"
+  ],
+  "sources": {
+    "arbeitnow_de": {
+      "label": "Arbeitnow Germany (Werkstudent)",
+      "type": "arbeitnow_api",
+      "enabled": true,
+      "params": {
+        "tags": "machine-learning,artificial-intelligence,python",
+        "remote": "false"
+      }
+    },
+    "arbeitnow_remote": {
+      "label": "Arbeitnow Remote",
+      "type": "arbeitnow_api",
+      "enabled": true,
+      "params": {
+        "tags": "machine-learning,artificial-intelligence",
+        "remote": "true"
+      }
+    },
+    "remoteok": {
+      "label": "RemoteOK (Global)",
+      "type": "remoteok_json",
+      "enabled": true,
+      "url": "https://remoteok.com/remote-machine-learning-jobs.json"
+    },
+    "wwr": {
+      "label": "We Work Remotely",
+      "type": "rss",
+      "enabled": true,
+      "url": "https://weworkremotely.com/categories/remote-programming-jobs.rss"
+    },
+    "jobicy": {
+      "label": "Jobicy (Global Remote AI/ML)",
+      "type": "rss",
+      "enabled": true,
+      "url": "https://jobicy.com/?feed=job_feed&job_categories=dev-engineering&job_types=full-time"
+    }
+  },
+  "limit_per_source": 8,
+  "cache_hours": 6
+}

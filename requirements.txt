@@ -9,6 +9,7 @@ requests>=2.31.0
 fastapi>=0.111.0
 uvicorn>=0.29.0
 sqlalchemy>=2.0.0
+aiofiles>=23.0.0          # Required for StaticFiles
 
 # LinkedIn OAuth
 flask>=3.0.0

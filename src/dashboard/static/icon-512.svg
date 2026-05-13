@@ -1,0 +1,6 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/5000/svg">
+  <rect width="512" height="512" rx="100" fill="#141726"/>
+  <rect x="50" y="50" width="412" height="412" rx="70" fill="#1c1f33"/>
+  <text x="256" y="310" font-family="system-ui" font-size="220" font-weight="700" 
+        fill="#7c6fff" text-anchor="middle">⚡</text>
+</svg>
