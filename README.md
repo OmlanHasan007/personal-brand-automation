@@ -13,7 +13,7 @@
 [![PWA](https://img.shields.io/badge/PWA-installable-5A0FC8?style=flat)](https://web.dev/pwa)
 [![Auto README](https://img.shields.io/badge/README-auto--generated-brightgreen?style=flat)](scripts/generate_readme.py)
 
-> **Last updated:** 2026-05-16 00:19 UTC · **Python files:** 12 across 10 modules
+> **Last updated:** 2026-05-16 00:16 UTC · **Python files:** 12 across 10 modules
 
 ---
 
@@ -37,14 +37,14 @@ all in one repo that actually does something useful.
 ```
 personal-brand-automation/
 ├── src/
-│   ├── content/  # generator, rss_reader
+│   ├── content/  # rss_reader, generator
 │   ├── cv/  # tailor
 │   ├── dashboard/  # app
 │   ├── github/  # readme_updater
 │   ├── interview/  # coach
 │   ├── jobs/  # scraper
 │   ├── learning/  # radar
-│   ├── linkedin/  # oauth, poster
+│   ├── linkedin/  # poster, oauth
 │   ├── models/  # router
 │   ├── tracker/  # api
 ├── scripts/
