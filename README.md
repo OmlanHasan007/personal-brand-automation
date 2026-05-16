@@ -13,7 +13,7 @@
 [![PWA](https://img.shields.io/badge/PWA-installable-5A0FC8?style=flat)](https://web.dev/pwa)
 [![Auto README](https://img.shields.io/badge/README-auto--generated-brightgreen?style=flat)](scripts/generate_readme.py)
 
-> **Last updated:** 2026-05-13 01:13 UTC · **Python files:** 12 across 10 modules
+> **Last updated:** 2026-05-16 00:19 UTC · **Python files:** 12 across 10 modules
 
 ---
 
@@ -37,14 +37,14 @@ all in one repo that actually does something useful.
 ```
 personal-brand-automation/
 ├── src/
-│   ├── content/  # rss_reader, generator
+│   ├── content/  # generator, rss_reader
 │   ├── cv/  # tailor
 │   ├── dashboard/  # app
 │   ├── github/  # readme_updater
 │   ├── interview/  # coach
 │   ├── jobs/  # scraper
 │   ├── learning/  # radar
-│   ├── linkedin/  # poster, oauth
+│   ├── linkedin/  # oauth, poster
 │   ├── models/  # router
 │   ├── tracker/  # api
 ├── scripts/
@@ -147,8 +147,8 @@ python main.py status                 # Check all keys
 
 | `auto_readme.yml` | Auto Readme | on push / manual |
 | `paper_digest.yml` | Paper Digest | 0 8 * * 5'   # Every Friday at 08:00 UTC |
-| `readme_update.yml` | Readme Update | 0 22 * * 0'  # Every Sunday at 22:00 UTC |
-| `weekly_post.yml` | Weekly Post | 0 7 * * 1'   # Every Monday at 07:00 UTC (09:00 Dresden time) |
+| `readme_update.yml` | Readme Update | 0 22 * * 0'   # Every Sunday 22:00 UTC |
+| `weekly_post.yml` | Weekly Post | 0 7 * * 1'   # Every Monday 07:00 UTC (09:00 Dresden) |
 
 All workflows run on GitHub's free tier. Set secrets in repo Settings → Secrets → Actions.
 
