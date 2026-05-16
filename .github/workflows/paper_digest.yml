@@ -5,26 +5,43 @@ on:
     - cron: '0 8 * * 5'   # Every Friday at 08:00 UTC
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # Opt into Node 24 now
+
 jobs:
   digest:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v5.4.0
         with:
           python-version: '3.11'
+          cache: 'pip'
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Check required secrets
+        run: |
+          if [ -z "${{ secrets.GEMINI_API_KEY }}" ]; then
+            echo "ERROR: GEMINI_API_KEY secret is not set."
+            echo "Go to: repo Settings -> Secrets -> Actions -> New secret"
+            exit 1
+          fi
+          echo "Secrets check passed."
+
       - name: Fetch and summarise papers
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python main.py papers --feed arxiv_cs_lg --limit 5 --save
+          GROQ_API_KEY:   ${{ secrets.GROQ_API_KEY }}
+        run: |
+          mkdir -p logs
+          python main.py papers --feed arxiv_cs_lg --limit 5 --save
+          echo "Digest complete."
 
       - name: Upload digest as artifact
         uses: actions/upload-artifact@v4
@@ -32,3 +49,4 @@ jobs:
           name: paper-digest-${{ github.run_number }}
           path: logs/digest_*.md
           retention-days: 30
+          if-no-files-found: warn

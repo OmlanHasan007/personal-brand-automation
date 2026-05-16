@@ -2,8 +2,11 @@ name: Weekly LinkedIn Post
 
 on:
   schedule:
-    - cron: '0 7 * * 1'   # Every Monday at 07:00 UTC (09:00 Dresden time)
-  workflow_dispatch:        # Allow manual trigger from GitHub UI
+    - cron: '0 7 * * 1'   # Every Monday 07:00 UTC (09:00 Dresden)
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   post:
@@ -11,28 +14,45 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v5.4.0
         with:
           python-version: '3.11'
+          cache: 'pip'
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Check required secrets
+        run: |
+          MISSING=""
+          [ -z "${{ secrets.GROQ_API_KEY }}" ]            && MISSING="$MISSING GROQ_API_KEY"
+          [ -z "${{ secrets.LINKEDIN_ACCESS_TOKEN }}" ]   && MISSING="$MISSING LINKEDIN_ACCESS_TOKEN"
+          [ -z "${{ secrets.LINKEDIN_PERSON_URN }}" ]     && MISSING="$MISSING LINKEDIN_PERSON_URN"
+          if [ -n "$MISSING" ]; then
+            echo "ERROR: Missing secrets:$MISSING"
+            echo "Go to repo Settings -> Secrets -> Actions and add them."
+            exit 1
+          fi
+          echo "All secrets present."
+
       - name: Generate and publish LinkedIn post
         env:
-          ANTHROPIC_API_KEY:       ${{ secrets.ANTHROPIC_API_KEY }}
+          GROQ_API_KEY:            ${{ secrets.GROQ_API_KEY }}
           GEMINI_API_KEY:          ${{ secrets.GEMINI_API_KEY }}
           LINKEDIN_CLIENT_ID:      ${{ secrets.LINKEDIN_CLIENT_ID }}
           LINKEDIN_CLIENT_SECRET:  ${{ secrets.LINKEDIN_CLIENT_SECRET }}
           LINKEDIN_ACCESS_TOKEN:   ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
           LINKEDIN_PERSON_URN:     ${{ secrets.LINKEDIN_PERSON_URN }}
         run: |
-          # Auto-pick topic based on week number to avoid repetition
           WEEK=$(date +%V)
           TOPICS=("project" "learning" "paper" "insight" "progress")
           TOPIC=${TOPICS[$((WEEK % 5))]}
           echo "This week's topic: $TOPIC"
-          python main.py post --topic $TOPIC --tone professional --publish
+          python main.py draft --topic $TOPIC --tone professional
+          echo "Draft generated. Run 'python main.py publish' locally to post."
+          # Note: auto-publish disabled until LinkedIn OAuth token is refreshed.
+          # Uncomment the line below once your token is set in secrets:
+          # python main.py post --topic $TOPIC --tone professional --publish
